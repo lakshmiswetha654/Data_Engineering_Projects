@@ -31,85 +31,110 @@ sales.csv (Unity Catalog Volume) → Bronze (raw, traceable) → Silver (cleaned
 ## Pipeline Lineage
 ![Pipeline lineage](Images/Pipeline_lineage.png)
 
-Object	Type	Description
-bronze_sales	Streaming table	Raw ingested sales records
-silver_sales	Materialized view	Cleaned and validated records
-gold_monthly_sales_trends	Materialized view	Sales and profit by month
-gold_product_performance	Materialized view	Sales, quantity and profit by category/subcategory
-gold_data_quality_summary	Materialized view	Issue counts and validation status (reads Bronze and Silver)
-Materialized views refresh incrementally where possible.
+|Object	| Type	| Description|
+|-------|--------|------------|
+|bronze_hotel_booking|	Streaming table|	Raw ingested sales records|
+|silver_clean	|Materialized view|	Cleaned and validated records|
+|gold_monthly_booking	|Materialized view|	bookings, revenue by month|
+|gold_hotel_summary|	Materialized view|	booking, room_nights, avg_daily_rate, by region, city, hotel name|
+|gold_room_type_summary|	Materialized view|	bookings, net revenue by room type|
+|gold_channel_summary|	Materialized view|	bookings, net revenue by booking channels
+|gold_data_quality_summary	|Materialized view|	Issue counts and validation status (reads Bronze and Silver)
+### Materialized views refresh incrementally where possible.
 
 ## Tech Stack
-Azure Databricks
-Lakeflow Spark Declarative Pipelines (SQL)
-Unity Catalog (Volumes)
-Delta Lake
-Databricks SQL
+1. Azure Databricks
+2. Lakeflow Spark Declarative Pipelines (SQL)
+3. Unity Catalog (Volumes)
+4. Delta Lake
+5. Databricks SQL
 ## Dataset
-Synthetic retail sales dataset: 1,506 rows × 33 columns, with intentionally injected quality issues (whitespace, missing values, duplicates, zero quantities, negative prices, missing sales values).
+Dataset hotel_bookings_raw.csv is synthetic (made up for this project). It has 1,316 rows and 20 columns covering hotel stays in 2025.
 
-The grain is one sales line per row. Order ID alone is not unique, because one order can contain multiple product lines.
+The grain is one booking line per row.**booking ID** alone is unique for each real booking.
 
 ## Repository Structure
+```text
+Hotel_Booking_Medallion_Lakeflow/
+|
 ├── README.md
-├── data/                      # sample dataset
-├── pipeline/
+├── data/
+     |_ hotel_bookings_raw.csv                     # sample dataset
+├── ETL pipeline/
 │   ├── bronze/bronze_transformation.sql
 │   ├── silver/silver_transformation.sql
 │   └── gold/gold_transformation.sql
-├── validation/                # reconciliation queries
-├── docs/                      # case study, DQ rules, review answers
+├── docs/                      # case study
 └── images/                    # architecture and screenshots
+``` 
+
 ## Layer Details
-Bronze
-Reads the CSV from a Unity Catalog Volume: TODO: /Volumes/<catalog>/<schema>/<volume>/sales.csv
-Keeps source values unchanged
-Adds ingestion metadata: TODO: e.g. _ingest_timestamp, _source_file
-Silver
-TODO: trimming and standardization of category and subcategory
-TODO: type casting (dates, quantity, price, sales, profit)
-TODO: quality flags and duplicate handling
-TODO: pipeline expectations (CONSTRAINT ... EXPECT ...)
-Gold
-gold_monthly_sales_trends: sales and profit by month
-gold_product_performance: category and subcategory comparison
-gold_data_quality_summary: missing, invalid, duplicate and suspicious counts
+### Bronze
+- Reads the CSV from a Unity Catalog Volume: TODO: /Volumes/<catalog>/<schema>/<volume>/hotel_booking.csv
+- Keeps source values unchanged
+- Adds ingestion metadata: TODO: e.g. _ingest_timestamp, _source_file
+### Silver
+- TODO: Remove spaces, use Title Case
+- TODO: quality flags and duplicate handling
+- TODO: pipeline expectations (CONSTRAINT ... EXPECT ...)
+### Gold
+- gold_monthly_booking: bookings, revenue by month
+- gold_hotel_summary: region, city, hotel name comparision
+- gold_room_type_summary: room type comparision
+- gold_data_quality_summary: missing, invalid, duplicate and suspicious counts
 ## Data Quality Rules
-Rule	Treatment
-Completeness	Missing values in required fields are identified, not silently replaced
-Standardization	Leading/trailing spaces removed; category values standardized
-Type validity	Date, quantity, price, sales and profit cast to proper types
-Business validity	Zero/negative quantity and negative price are flagged for investigation, not blindly dropped
-Duplicates	Exact duplicates and business-level duplicates detected at sales-line grain
-Auditability	Raw data is always retained in Bronze
-Details: docs/data_quality_rules.md
+|Rule	|Treatment|
+|-----|----------|
+|Remove duplicates|SELECT DISTINCT|
+|Fix text|TRIM+INITCAP|
+|Fill blanks|COALESCE+ DATEDIFF|
+|Check rules | EXCEPT  DROP ROW|
 
 ## Reconciliation
-Check	Result
-Source CSV rows	1,506
-Bronze rows	TODO
-Silver rows (trusted)	TODO
-Excluded/quarantined rows	TODO (reason: TODO)
-Gold total sales = Silver total sales	TODO
-Queries: validation/
+|Check|	Result|
+|------|------|
+|Source CSV rows|	1,506|
+|Bronze rows|	TODO|
+|Silver clean rows|	TODO|
+|Silver reject rows|	TODO (reason: TODO)|
+|Clean rows Gold data quality = total bookings|	TODO
 
 ## How to Run
-Upload sales.csv to a Unity Catalog Volume and confirm read permissions.
-Clone this repo into your Databricks workspace (Repos / Git folder).
-Create a new Lakeflow Spark Declarative Pipeline and add the SQL files under pipeline/ as source code.
-Set the target catalog and schema: TODO.
-Run the pipeline (Start or Full refresh).
-Run the checks in validation/ and query the Gold tables.
+1. Upload sales.csv to a Unity Catalog Volume and confirm read permissions.
+2. Clone this repo into your Databricks workspace (Repos / Git folder).
+3. Create a new Lakeflow Spark Declarative Pipeline and add the SQL files under pipeline/ as source code.
+4. Set the target catalog and schema: TODO.
+5. Run the pipeline (Start or Full refresh).
+6. Run the checks in validation/ and query the Gold tables.
 ## Business Requirements Coverage
-ID	Requirement	Status
-BR-01	Sales trend	gold_monthly_sales_trends
-BR-02	Product performance	gold_product_performance
-BR-03	Geographic performance	TODO
-BR-04	Customer analysis	TODO
-BR-05	Sales-channel analysis	TODO
-BR-06	Data-quality visibility	gold_data_quality_summary
-BR-07	Reconciliation	validation/
-BR-08	Repeatability	Managed Lakeflow pipeline
+|ID|Requirement|Business expectation|
+|--|-----------|--------------------|
+BR-01
+Monthly trends
+Show bookings, cancelled bookings, room nights and net revenue for each stay month.
+BR-02
+Hotel performance
+Compare bookings, room nights, net revenue and average daily rate by region, city and hotel.
+BR-03
+Room type performance
+Compare bookings, room nights, net revenue and average guest rating by room type.
+BR-04
+Channel analysis
+Compare bookings, cancelled bookings, cancellation rate and net revenue by booking channel.
+BR-05
+Data-quality visibility
+Show how many rows had each problem (duplicates, bad dates, bad rate, blanks).
+BR-06
+Reconciliation
+Prove that Bronze rows = clean rows + rejected rows + duplicates removed.
+BR-07
+Repeatability
+Run everything as a Databricks pipeline that can be re-run with one click.
+BR-08
+Dashboard
+Build one dashboard (Databricks AI/BI or Power BI) on the Gold tables.
+
+
 ## Key Learnings
 Why raw data is preserved in Bronze for traceability
 Flagging vs. rejecting records
