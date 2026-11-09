@@ -93,7 +93,7 @@ Hotel_Booking_Medallion_Lakeflow/
 ## Reconciliation
 |Check|	Result|
 |------|------|
-|Source CSV rows|	1,506|
+|Source CSV rows|	1,316|
 |Bronze rows|	TODO|
 |Silver clean rows|	TODO|
 |Silver reject rows|	TODO (reason: TODO)|
