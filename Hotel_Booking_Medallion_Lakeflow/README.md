@@ -29,7 +29,7 @@ sales.csv (Unity Catalog Volume) → Bronze (raw, traceable) → Silver (cleaned
 |Silver	| Improve trust and consistency	| Trim text, standardize categories, cast types, flag invalid values, handle duplicates|
 |Gold	| Serve business questions	| Monthly trends, hotel, room type, channel, data-quality summary|
 ## Pipeline Lineage
-![Pipeline lineage](Images/pipeline_lineage.png)
+![Pipeline lineage](Images/Pipeline_lineage.png)
 
 Object	Type	Description
 bronze_sales	Streaming table	Raw ingested sales records
