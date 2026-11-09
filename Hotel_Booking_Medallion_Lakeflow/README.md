@@ -109,43 +109,22 @@ Hotel_Booking_Medallion_Lakeflow/
 ## Business Requirements Coverage
 |ID|Requirement|Business expectation|
 |--|-----------|--------------------|
-BR-01
-Monthly trends
-Show bookings, cancelled bookings, room nights and net revenue for each stay month.
-BR-02
-Hotel performance
-Compare bookings, room nights, net revenue and average daily rate by region, city and hotel.
-BR-03
-Room type performance
-Compare bookings, room nights, net revenue and average guest rating by room type.
-BR-04
-Channel analysis
-Compare bookings, cancelled bookings, cancellation rate and net revenue by booking channel.
-BR-05
-Data-quality visibility
-Show how many rows had each problem (duplicates, bad dates, bad rate, blanks).
-BR-06
-Reconciliation
-Prove that Bronze rows = clean rows + rejected rows + duplicates removed.
-BR-07
-Repeatability
-Run everything as a Databricks pipeline that can be re-run with one click.
-BR-08
-Dashboard
-Build one dashboard (Databricks AI/BI or Power BI) on the Gold tables.
-
-
+|BR-01|Monthly trends|Show bookings, cancelled bookings, room nights and net revenue for each stay month.|
+|BR-02|Hotel performance|Compare bookings, room nights, net revenue and average daily rate by region, city and hotel.
+|BR-03||Room type performance||Compare bookings, room nights, net revenue and average guest rating by room type.|
+|BR-04||Channel analysi|Compare bookings, cancelled bookings, cancellation rate and net revenue by booking channel.|
+|BR-05||Data-quality visibility||Show how many rows had each problem (duplicates, bad dates, bad rate, blanks).|
+|BR-06||Reconciliation||Prove that Bronze rows = clean rows + rejected rows + duplicates removed.|
+|BR-07||Repeatability||Run everything as a Databricks pipeline that can be re-run with one click.|
+|BR-08||Dashboard||Build one dashboard (Databricks AI/BI or Power BI) on the Gold tables.|
 ## Key Learnings
-Why raw data is preserved in Bronze for traceability
-Flagging vs. rejecting records
-Why Order ID is an unsafe duplicate key
-Declarative pipelines with data-quality expectations and lineage
+- Why raw data is preserved in Bronze for traceability
+- Flagging vs. rejecting records
+- Declarative pipelines with data-quality expectations and lineage
 ## Future Improvements
-Daily file arrival with Auto Loader and incremental processing
-Separate customer and product dimension tables
-Alerts and monitoring on data-quality metrics
-Dashboard on top of the Gold layer
-## License
-MIT (see LICENSE)
+- Daily file arrival with Auto Loader and incremental processing
+- Alerts and monitoring on data-quality metrics
+- Dashboard on top of the Gold layer
+
 
 
