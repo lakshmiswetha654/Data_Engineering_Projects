@@ -75,35 +75,30 @@ The project follows a three-layer architecture.
 ## 📂 Project Structure
 
 ```text
-Databricks-ETL-Pipeline/
-│
-├── notebooks/
-│   ├── 01_bronze_ingestion
-│   ├── 02_silver_transformation
-│   └── 03_gold_aggregation
-│
+Online_Learning_Enrollment_Projec/
+|
+├── README.md
 ├── data/
-│   └── README.md
-│
-├── sql/
-│   └── gold_analysis.sql
-│
-├── docs/
-│   └── architecture.md
-│
-└── README.md
-```
-
+     |_ Online_learning_raw.csv                     # sample dataset
+├── ETL pipeline/
+│   ├── Online_bronze/bronze_transformation.sql
+│   ├── Online_silver/silver_transformation.sql
+│   └── Online_gold/gold_transformation.sql
+├── docs/                      # case study
+└── images/                    # architecture and pipeline_lineage
 ---
+```
 ## 📊 Key Analysis
 
 The Gold layer focuses on generating business insights such as:
 
-- Total bookings.
-- Total cancelled bookings.
-- Cancellation percentage.
-- Channel-wise booking summary.
-- Booking trends and patterns.
+- Total enrollments.
+- Net_Revenue.
+- Completion rate.
+- Channel-wise summary.
+- Course-wise summary.
+- Category-wise summary.
+- learner_status trends and patterns.
 
 ---
 
@@ -160,7 +155,7 @@ Through this project, I gained practical experience in:
 
 ## 👩‍💻 Author
 
-**Shweta**
+**Swetha**
 
 Aspiring Data Analyst | Data Engineering Enthusiast
 
