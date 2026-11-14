@@ -61,7 +61,7 @@ The project follows a three-layer architecture.
 
 ## 🔄 ETL Workflow
 
-1. Extract raw booking data.
+1. Extract raw online learning data.
 2. Load data into the Bronze layer.
 3. Transform and clean the data.
 4. Validate records using business rules.
