@@ -23,8 +23,6 @@ An end-to-end online learning enrollment ETL pipeline on **Azure Databricks**, b
 | Technology | Purpose |
 |---|---|
 | Databricks | Data Engineering Platform |
-| Apache Spark | Distributed Data Processing |
-| PySpark | Data Transformation |
 | SQL | Data Analysis and Aggregation |
 | Delta Lake | Data Storage |
 | Unity Catalog | Data Governance |
