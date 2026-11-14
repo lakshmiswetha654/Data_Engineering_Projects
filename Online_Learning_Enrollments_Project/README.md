@@ -58,6 +58,8 @@ The project follows a three-layer architecture.
 - Prepare data for dashboard development.
 
 ---
+Pipeline
+![Pipeline](Images/Online_pipeline_lineage)
 
 ## 🔄 ETL Workflow
 
